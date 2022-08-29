@@ -42,7 +42,7 @@ extension RandomColors<T> on Iterable<T> {
       );
 }
 
-class AvailableColorsWidget extends InheritedModel {
+class AvailableColorsWidget extends InheritedModel<AvailableColorsWidget> {
   final Color color1;
   final Color color2;
 
@@ -73,6 +73,16 @@ class AvailableColorsWidget extends InheritedModel {
     }
     return false;
   }
+
+  static AvailableColorsWidget of(
+    BuildContext context,
+    AvailableColors aspect,
+  ) {
+    return InheritedModel.inheritFrom<AvailableColorsWidget>(
+      context,
+      aspect: aspect,
+    )!;
+  }
 }
 
 class ColorWidget extends StatelessWidget {
@@ -88,13 +98,18 @@ class ColorWidget extends StatelessWidget {
       case AvailableColors.one:
         devtool.log('Color1 has rebuild');
         break;
-
       case AvailableColors.two:
         devtool.log('Color2 has rebuild');
         break;
     }
+
+    final provider = AvailableColorsWidget.of(
+      context,
+      color,
+    );
     return Container(
       height: 100,
+      color: color == AvailableColors.one ? provider.color1 : provider.color2,
     );
   }
 }
