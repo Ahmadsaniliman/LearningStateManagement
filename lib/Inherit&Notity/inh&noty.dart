@@ -41,14 +41,14 @@ class ColorOpacity extends StatelessWidget {
 }
 
 class SliderData extends ChangeNotifier {
-  final double _value = 0.0;
+  double _value = 0.0;
   double get value => _value;
   set value(double newValue) {
-    if (newValue != _value) {
-      value = newValue;
+    if (newValue != value) {
+      _value = newValue;
       notifyListeners();
     }
   }
 }
 
-final sliderData = SliderData();
+// final sliderData = SliderData();
