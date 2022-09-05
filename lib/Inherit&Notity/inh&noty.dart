@@ -11,30 +11,43 @@ class ColorOpacity extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Color Opacity'),
       ),
-      body: Column(
-        children: [
-          Slider(
-            value: 0.0,
-            onChanged: (value) {},
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
+      body: SliderInheriedNotifier(
+        sliderData: sliderData,
+        child: Builder(builder: (context) {
+          return Column(
             children: [
-              Expanded(
-                child: Container(
-                  height: 150,
-                  color: Colors.green,
-                ),
+              Slider(
+                value: 0.0,
+                onChanged: (value) {
+                  sliderData.value = value;
+                },
               ),
-              Expanded(
-                child: Container(
-                  height: 150,
-                  color: Colors.blue,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Opacity(
+                      opacity: SliderInheriedNotifier.of(context),
+                      child: Container(
+                        height: 150,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Opacity(
+                      opacity: SliderInheriedNotifier.of(context),
+                      child: Container(
+                        height: 150,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
+          );
+        }),
       ),
     );
   }
@@ -44,11 +57,31 @@ class SliderData extends ChangeNotifier {
   double _value = 0.0;
   double get value => _value;
   set value(double newValue) {
-    if (newValue != value) {
+    if (newValue != _value) {
       _value = newValue;
       notifyListeners();
     }
   }
 }
 
-// final sliderData = SliderData();
+class SliderInheriedNotifier extends InheritedNotifier<SliderData> {
+  const SliderInheriedNotifier({
+    Key? key,
+    required Widget child,
+    required SliderData sliderData,
+  }) : super(
+          key: key,
+          child: child,
+          notifier: sliderData,
+        );
+
+  static double of(BuildContext context) {
+    return context
+            .dependOnInheritedWidgetOfExactType<SliderInheriedNotifier>()
+            ?.notifier
+            ?._value ??
+        0.0;
+  }
+}
+
+final sliderData = SliderData();
