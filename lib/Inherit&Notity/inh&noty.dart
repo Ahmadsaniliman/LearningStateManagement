@@ -11,43 +11,34 @@ class ColorOpacity extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Color Opacity'),
       ),
-      body: SliderInheriedNotifier(
-        sliderData: sliderData,
-        child: Builder(builder: (context) {
+      body: Builder(
+        builder: (context) {
           return Column(
             children: [
               Slider(
                 value: 0.0,
-                onChanged: (value) {
-                  sliderData.value = value;
-                },
+                onChanged: (value) {},
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Expanded(
-                    child: Opacity(
-                      opacity: SliderInheriedNotifier.of(context),
-                      child: Container(
-                        height: 150,
-                        color: Colors.green,
-                      ),
+                    child: Container(
+                      height: 150,
+                      color: Colors.green,
                     ),
                   ),
                   Expanded(
-                    child: Opacity(
-                      opacity: SliderInheriedNotifier.of(context),
-                      child: Container(
-                        height: 150,
-                        color: Colors.blue,
-                      ),
+                    child: Container(
+                      height: 150,
+                      color: Colors.blue,
                     ),
                   ),
                 ],
               ),
             ],
           );
-        }),
+        },
       ),
     );
   }
@@ -64,11 +55,11 @@ class SliderData extends ChangeNotifier {
   }
 }
 
-class SliderInheriedNotifier extends InheritedNotifier<SliderData> {
-  const SliderInheriedNotifier({
+class SliderDataInheritedNotifier extends InheritedNotifier {
+  const SliderDataInheritedNotifier({
     Key? key,
-    required Widget child,
     required SliderData sliderData,
+    required Widget child,
   }) : super(
           key: key,
           child: child,
@@ -76,10 +67,8 @@ class SliderInheriedNotifier extends InheritedNotifier<SliderData> {
         );
 
   static double of(BuildContext context) {
-    return context
-            .dependOnInheritedWidgetOfExactType<SliderInheriedNotifier>()
-            ?.notifier
-            ?._value ??
+    return context.dependOnInheritedWidgetOfExactType <
+            SliderDataInheritedNotifier()?.notifier?.value ??
         0.0;
   }
 }
