@@ -1,48 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 class Contact {
-  final String name;
-  final String id;
+  final int id;
+  final String firstName;
+  final String number;
 
   Contact({
-    required this.name,
-  }) : id = const Uuid().v4();
+    required this.id,
+    required this.firstName,
+    required this.number,
+  });
 }
 
-class ContactBook extends ValueNotifier<List<Contact>> {
-  // Singleton.
-  ContactBook._sharedInstance() : super([]);
-  static final _shared = ContactBook._sharedInstance();
+class ContactBook {
+  ContactBook._sharedInstance();
+  static final ContactBook _shared = ContactBook._sharedInstance();
   factory ContactBook() => _shared;
 
-//   final List<Contact> _contacts = [
-//     Contact(name: 'Liman'),
-//     Contact(name: 'Ahmad'),
-//     Contact(name: 'Sani'),
-//     Contact(name: 'Sweety'),
-//   ];
+  // Get Length of Contact.
+  int get length => _contacts.length;
 
+  // Conatct Storage
+  final List<Contact> _contacts = [
+    Contact(
+      id: 1,
+      firstName: 'Ahmad',
+      number: 08088405841.toString(),
+    ),
+  ];
+
+  //Add Conatact.
   void addContact({
     required Contact contact,
   }) {
-    value.add(contact);
-    notifyListeners();
+    _contacts.add(contact);
   }
 
-  int get length => value.length;
+  // Remove Contact.
+  void removeContact({
+    required Contact contact,
+  }) {
+    _contacts.remove(contact);
+  }
 
+  // Not For Now
   Contact? contact({
     required int atIndex,
   }) {
-    return value.length > atIndex ? value[atIndex] : null;
-  }
-
-  void deleteContact({
-    required Contact contact,
-  }) {
-    value.remove(contact);
-    notifyListeners();
+    return _contacts.length > atIndex ? _contacts[atIndex] : null;
   }
 }
 
@@ -61,88 +66,132 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Contact Book'),
       ),
-      body: ValueListenableBuilder(
-        valueListenable: contactBook,
-        builder: (contact, value, child) {
-          final contacts = value as List<Contact>;
-          return ListView.builder(
-            itemCount: contacts.length,
-            itemBuilder: (context, index) {
-              final contact = contacts[index];
-              return Material(
-                color: Colors.white,
-                elevation: 7,
-                child: Dismissible(
-                  key: ValueKey(contact.id),
-                  onDismissed: (direction) {
-                    contacts.remove(contact);
-                  },
-                  child: ListTile(
-                    title: Text(contact.name),
-                  ),
-                ),
-              );
-            },
+      body: ListView.builder(
+        itemCount: contactBook.length,
+        itemBuilder: (context, index) {
+          final contact = contactBook.contact(atIndex: index);
+          return ListTile(
+            leading: Container(
+              height: 50.0,
+              width: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Text('${contact!.id}'),
+            ),
+            title: Text(
+              contact.firstName,
+            ),
+            subtitle: Text('$contact.number'),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.of(context).pushNamed('/new-name-route');
-        },
+        onPressed: () async {},
         child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-class NewNameView extends StatefulWidget {
-  const NewNameView({Key? key}) : super(key: key);
+class NewContactPage extends StatefulWidget {
+  const NewContactPage({Key? key}) : super(key: key);
 
   @override
-  State<NewNameView> createState() => _NewNameViewState();
+  _NewContactPageState createState() => _NewContactPageState();
 }
 
-class _NewNameViewState extends State<NewNameView> {
-  late final TextEditingController _controller;
+class _NewContactPageState extends State<NewContactPage> {
+  late final TextEditingController _firstNameController;
+  late final TextEditingController _numberController;
+//   late final TextEditingController _controller;
 
   @override
   void initState() {
-    _controller = TextEditingController();
     super.initState();
+    _firstNameController = TextEditingController();
+    _numberController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _firstNameController.dispose();
+    _numberController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Name'),
+        title: const Text('New Contact Bar'),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              hintText: 'Enter a new name here ...',
-              contentPadding: EdgeInsetsDirectional.all(20.0),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextFieldCont(
+              controller: _firstNameController,
+              text: 'Enter Your First Name',
+              type: TextInputType.emailAddress,
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              final contact = Contact(name: _controller.text);
-              ContactBook().addContact(contact: contact);
+            TextFieldCont(
+              controller: _numberController,
+              text: 'Enter Your Number',
+              type: TextInputType.number,
+            ),
+            TextButton(
+              onPressed: () {
+                final contact = Contact(
+                  id: 1,
+                  firstName: _firstNameController.text,
+                  number: _numberController.text,
+                );
+                ContactBook().addContact(
+                  contact: contact,
+                );
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-              Navigator.of(context).pop();
-            },
-            child: const Text('Add Name'),
+class TextFieldCont extends StatelessWidget {
+  const TextFieldCont({
+    Key? key,
+    required TextEditingController controller,
+    required this.text,
+    required this.type,
+  })  : _controller = controller,
+        super(key: key);
+
+  final TextEditingController _controller;
+  final String text;
+  final TextInputType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: TextField(
+        controller: _controller,
+        keyboardType: type,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.all(
+            20.0,
           ),
-        ],
+          hintText: text,
+        ),
       ),
     );
   }

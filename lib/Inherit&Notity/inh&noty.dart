@@ -17,7 +17,9 @@ class ColorOpacity extends StatelessWidget {
             children: [
               Slider(
                 value: 0.0,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  sliderData.value = value;
+                },
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
@@ -66,11 +68,13 @@ class SliderDataInheritedNotifier extends InheritedNotifier {
           notifier: sliderData,
         );
 
-  static double of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType <
-            SliderDataInheritedNotifier()?.notifier?.value ??
-        0.0;
-  }
+//   static double of(BuildContext context) {
+//     return context
+//             .dependOnInheritedWidgetOfExactType<SliderDataInheritedNotifier>()
+//             ?.notifier
+//             ?.value ??
+//         0.0;
+//   }
 }
 
 final sliderData = SliderData();
