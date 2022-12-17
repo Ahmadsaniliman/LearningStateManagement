@@ -25,7 +25,7 @@ class ContactBook {
     Contact(
       id: 1,
       firstName: 'Ahmad',
-      number: 08088405841.toString(),
+      number: '08088405841',
     ),
   ];
 
@@ -78,17 +78,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.green,
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              child: Text('${contact!.id}'),
+              child: Center(child: Text('${contact!.id}')),
             ),
             title: Text(
               contact.firstName,
             ),
-            subtitle: Text('$contact.number'),
+            subtitle: Text(contact.number),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
+        onPressed: () async {
+          Navigator.of(context).pushNamed("/new-Contact-Route");
+        },
         child: const Icon(Icons.add),
       ),
     );
@@ -127,34 +129,41 @@ class _NewContactPageState extends State<NewContactPage> {
       appBar: AppBar(
         title: const Text('New Contact Bar'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextFieldCont(
-              controller: _firstNameController,
-              text: 'Enter Your First Name',
-              type: TextInputType.emailAddress,
-            ),
-            TextFieldCont(
-              controller: _numberController,
-              text: 'Enter Your Number',
-              type: TextInputType.number,
-            ),
-            TextButton(
-              onPressed: () {
-                final contact = Contact(
-                  id: 1,
-                  firstName: _firstNameController.text,
-                  number: _numberController.text,
-                );
-                ContactBook().addContact(
-                  contact: contact,
-                );
-                Navigator.of(context).pop();
-              },
-              child: const Text('Save'),
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 20.0,
+          horizontal: 30.0,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextFieldCont(
+                controller: _firstNameController,
+                text: 'Enter Your First Name',
+                type: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 20.0),
+              TextFieldCont(
+                controller: _numberController,
+                text: 'Enter Your Number',
+                type: TextInputType.number,
+              ),
+              TextButton(
+                onPressed: () {
+                  final contact = Contact(
+                    id: 1,
+                    firstName: _firstNameController.text,
+                    number: _numberController.text,
+                  );
+                  ContactBook().addContact(
+                    contact: contact,
+                  );
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -11,9 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'State Management Demo',
-      theme: ThemeData(),
-      home: const MyHomePage(),
-    );
+        title: 'State Management Demo',
+        theme: ThemeData(),
+        home: const MyHomePage(),
+        routes: {
+          "/new-Contact-Route": (context) => const NewContactPage(),
+        });
   }
 }
