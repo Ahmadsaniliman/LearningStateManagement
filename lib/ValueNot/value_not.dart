@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class Contact {
-  final int id;
+  final String id;
   final String firstName;
   final String number;
 
   Contact({
-    required this.id,
     required this.firstName,
     required this.number,
-  });
+  }) : id = const Uuid().v4();
 }
 
-class ContactBook {
-  ContactBook._sharedInstance();
+class ContactBook extends ValueNotifier<List<Contact>> {
+  ContactBook._sharedInstance() : super([]);
   static final ContactBook _shared = ContactBook._sharedInstance();
   factory ContactBook() => _shared;
 
   // Get Length of Contact.
-  int get length => _contacts.length;
+  int get length => value.length;
 
   // Conatct Storage
   final List<Contact> _contacts = [
     Contact(
-      id: 1,
       firstName: 'Ahmad',
       number: '08088405841',
     ),
@@ -33,14 +32,20 @@ class ContactBook {
   void addContact({
     required Contact contact,
   }) {
-    _contacts.add(contact);
+    final contacts = value;
+    contacts.add(contact);
+    notifyListeners();
   }
 
   // Remove Contact.
   void removeContact({
     required Contact contact,
   }) {
-    _contacts.remove(contact);
+    final contacts = value;
+    if (contacts.contains(contact)) {
+      contacts.remove(contact);
+      notifyListeners();
+    }
   }
 
   // Not For Now
@@ -78,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.green,
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              child: Center(child: Text('${contact!.id}')),
+              child: Center(child: Text(contact!.id)),
             ),
             title: Text(
               contact.firstName,
@@ -151,7 +156,6 @@ class _NewContactPageState extends State<NewContactPage> {
               TextButton(
                 onPressed: () {
                   final contact = Contact(
-                    id: 1,
                     firstName: _firstNameController.text,
                     number: _numberController.text,
                   );
