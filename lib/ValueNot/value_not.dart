@@ -21,12 +21,12 @@ class ContactBook extends ValueNotifier<List<Contact>> {
   int get length => value.length;
 
   // Conatct Storage
-  final List<Contact> _contacts = [
-    Contact(
-      firstName: 'Ahmad',
-      number: '08088405841',
-    ),
-  ];
+//   final List<Contact> _contacts = [
+//     Contact(
+//       firstName: 'Ahmad',
+//       number: '08088405841',
+//     ),
+//   ];
 
   //Add Conatact.
   void addContact({
@@ -52,7 +52,7 @@ class ContactBook extends ValueNotifier<List<Contact>> {
   Contact? contact({
     required int atIndex,
   }) {
-    return _contacts.length > atIndex ? _contacts[atIndex] : null;
+    return value.length > atIndex ? value[atIndex] : null;
   }
 }
 
@@ -71,24 +71,38 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Contact Book'),
       ),
-      body: ListView.builder(
-        itemCount: contactBook.length,
-        itemBuilder: (context, index) {
-          final contact = contactBook.contact(atIndex: index);
-          return ListTile(
-            leading: Container(
-              height: 50.0,
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Center(child: Text(contact!.id)),
-            ),
-            title: Text(
-              contact.firstName,
-            ),
-            subtitle: Text(contact.number),
+      body: ValueListenableBuilder(
+        valueListenable: ContactBook(),
+        builder: (contact, value, index) {
+          final contacts = value as List<Contact>;
+          return ListView.builder(
+            itemCount: contactBook.length,
+            itemBuilder: (context, index) {
+              final contact = contacts[index];
+              return Dismissible(
+                key: ValueKey(contact.id),
+                onDismissed: (diection) {
+                  ContactBook().removeContact(contact: contact);
+                },
+                child: ListTile(
+                  leading: Container(
+                    height: 50.0,
+                    width: 50.0,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Center(
+                      child: Text(contact.id),
+                    ),
+                  ),
+                  title: Text(
+                    contact.firstName,
+                  ),
+                  subtitle: Text(contact.number),
+                ),
+              );
+            },
           );
         },
       ),
