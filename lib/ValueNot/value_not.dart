@@ -20,14 +20,6 @@ class ContactBook extends ValueNotifier<List<Contact>> {
   // Get Length of Contact.
   int get length => value.length;
 
-  // Conatct Storage
-//   final List<Contact> _contacts = [
-//     Contact(
-//       firstName: 'Ahmad',
-//       number: '08088405841',
-//     ),
-//   ];
-
   //Add Conatact.
   void addContact({
     required Contact contact,
@@ -66,46 +58,45 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    final contactBook = ContactBook();
+    // final contactBook = ContactBook();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contact Book'),
       ),
       body: ValueListenableBuilder(
-        valueListenable: ContactBook(),
-        builder: (contact, value, index) {
-          final contacts = value as List<Contact>;
-          return ListView.builder(
-            itemCount: contactBook.length,
-            itemBuilder: (context, index) {
-              final contact = contacts[index];
-              return Dismissible(
-                key: ValueKey(contact.id),
-                onDismissed: (diection) {
-                  ContactBook().removeContact(contact: contact);
-                },
-                child: ListTile(
-                  leading: Container(
-                    height: 50.0,
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(20.0),
+          valueListenable: ContactBook(),
+          builder: (contact, value, context) {
+            final contacts = value as List<Contact>;
+            return ListView.builder(
+              itemCount: contacts.length,
+              itemBuilder: (context, index) {
+                final contact = contacts[index];
+                return Dismissible(
+                  key: ValueKey(contact.id),
+                  onDismissed: (diection) {
+                    ContactBook().removeContact(contact: contact);
+                  },
+                  child: ListTile(
+                    leading: Container(
+                      height: 50.0,
+                      width: 50.0,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Center(
+                        child: Text(contact.id),
+                      ),
                     ),
-                    child: Center(
-                      child: Text(contact.id),
+                    title: Text(
+                      contact.firstName,
                     ),
+                    subtitle: Text(contact.number),
                   ),
-                  title: Text(
-                    contact.firstName,
-                  ),
-                  subtitle: Text(contact.number),
-                ),
-              );
-            },
-          );
-        },
-      ),
+                );
+              },
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Navigator.of(context).pushNamed("/new-Contact-Route");
