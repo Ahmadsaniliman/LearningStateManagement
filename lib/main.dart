@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(),
         home: ApiProvider(
           api: Api(),
-          child: const MyHomePage(),
+          child: const InheritedHomePage(),
         ),
         routes: {
           "/new-Contact-Route": (context) => const NewContactPage(),

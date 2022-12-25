@@ -63,7 +63,7 @@ class InheritedHomePage extends StatefulWidget {
 class _InheritedHomePageState extends State<InheritedHomePage> {
   @override
   Widget build(BuildContext context) {
-    ValueKey _textValue = const ValueKey<String?>(null);
+    ValueKey _textValue = const ValueKey<String?>('Tab On the screen');
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -85,7 +85,7 @@ class _InheritedHomePageState extends State<InheritedHomePage> {
             color: Colors.green,
             borderRadius: BorderRadius.circular(30.0),
           ),
-          child: Text(_textValue.value),
+          child: Center(child: Text(_textValue.value)),
         ),
       ),
     );

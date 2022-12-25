@@ -77,17 +77,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     ContactBook().removeContact(contact: contact);
                   },
                   child: ListTile(
-                    leading: Container(
-                      height: 50.0,
-                      width: 50.0,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(contact.id),
-                      ),
-                    ),
+                    // leading: Container(
+                    //   height: 50.0,
+                    //   width: 50.0,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.green,
+                    //     borderRadius: BorderRadius.circular(20.0),
+                    //   ),
+                    //   child: Center(
+                    //     child: Text(contact.id.toString()),
+                    //   ),
+                    // ),
                     title: Text(
                       contact.firstName,
                     ),
