@@ -91,10 +91,3 @@ class _InheritedHomePageState extends State<InheritedHomePage> {
     );
   }
 }
-
-class HelloSweety extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}

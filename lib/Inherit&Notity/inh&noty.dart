@@ -1,80 +1,74 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'dart:math';
 
-class ColorOpacity extends StatelessWidget {
-  const ColorOpacity({Key? key}) : super(key: key);
+enum AvailableColors { one, two }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Color Opacity'),
-      ),
-      body: Builder(
-        builder: (context) {
-          return Column(
-            children: [
-              Slider(
-                value: 0.0,
-                onChanged: (value) {
-                  sliderData.value = value;
-                },
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 150,
-                      color: Colors.green,
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 150,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class SliderData extends ChangeNotifier {
-  double _value = 0.0;
-  double get value => _value;
-  set value(double newValue) {
-    if (newValue != _value) {
-      _value = newValue;
-      notifyListeners();
-    }
-  }
-}
-
-class SliderDataInheritedNotifier extends InheritedNotifier {
-  const SliderDataInheritedNotifier({
+class AvailableColorsWidget extends InheritedModel<AvailableColors> {
+  final AvailableColors color1;
+  final AvailableColors color2;
+  const AvailableColorsWidget({
     Key? key,
-    required SliderData sliderData,
+    required this.color1,
+    required this.color2,
     required Widget child,
   }) : super(
           key: key,
           child: child,
-          notifier: sliderData,
         );
 
-//   static double of(BuildContext context) {
-//     return context
-//             .dependOnInheritedWidgetOfExactType<SliderDataInheritedNotifier>()
-//             ?.notifier
-//             ?.value ??
-//         0.0;
-//   }
+  static AvailableColorsWidget of(
+    BuildContext context,
+    AvailableColors aspect,
+  ) {
+    return InheritedModel.inheritFrom<AvailableColorsWidget>(
+      context,
+      aspect: aspect,
+    )!;
+  }
+
+  @override
+  bool updateShouldNotify(
+    covariant AvailableColorsWidget oldWidget,
+  ) {
+    return color1 != oldWidget.color1 || color2 != oldWidget.color2;
+  }
+
+  @override
+  bool updateShouldNotifyDependent(
+    covariant AvailableColorsWidget oldWidget,
+    Set dependencies,
+  ) {
+    if (dependencies.contains(AvailableColors.one) &&
+        color1 != oldWidget.color1) {
+      return true;
+    }
+    if (dependencies.contains(AvailableColors.two) &&
+        color2 != oldWidget.color2) {
+      return true;
+    }
+    return false;
+  }
 }
 
-final sliderData = SliderData();
+final colors = [
+  Colors.blue,
+  Colors.green,
+  Colors.brown,
+  Colors.yellow,
+  Colors.red,
+  Colors.black,
+  Colors.purple,
+  Colors.amber,
+  Colors.orange,
+  Colors.cyan,
+  Colors.pink,
+  Colors.lime,
+];
+
+extension RandomElement<T> on Iterable<T> {
+  T getRandomElement() => elementAt(
+        Random().nextInt(length),
+      );
+}
