@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:state_mangement_/ColorChange/color_change.dart';
+
 enum AvailableColors { one, two }
 
 class AvailableColorsWidget extends InheritedModel<AvailableColors> {
-  final AvailableColors color1;
-  final AvailableColors color2;
+  final MaterialColor color1;
+  final MaterialColor color2;
+
   const AvailableColorsWidget({
     Key? key,
     required this.color1,
@@ -52,19 +55,89 @@ class AvailableColorsWidget extends InheritedModel<AvailableColors> {
   }
 }
 
+class ColorWidget extends StatelessWidget {
+  const ColorWidget({
+    Key? key,
+    required this.color,
+  }) : super(key: key);
+  final AvailableColors color;
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = AvailableColorsWidget.of(
+      context,
+      color,
+    );
+    return Container(
+      height: 100.0,
+      color: color == AvailableColors.one ? provider.color1 : provider.color2,
+    );
+  }
+}
+
+class InheritedModelHomePage extends StatefulWidget {
+  const InheritedModelHomePage({Key? key}) : super(key: key);
+
+  @override
+  _InheritedModelHomePageState createState() => _InheritedModelHomePageState();
+}
+
+class _InheritedModelHomePageState extends State<InheritedModelHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    var _color1 = Colors.blue;
+    var _color2 = Colors.green;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Color Changer'),
+      ),
+      body: AvailableColorsWidget(
+        color1: _color1,
+        color2: _color2,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _color1 = colors.getRandomElement();
+                    });
+                  },
+                  child: const Text('Change Color1'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _color1 = colors.getRandomElement();
+                    });
+                  },
+                  child: const Text('Change Color2'),
+                ),
+              ],
+            ),
+            const ColorWidget(
+              color: AvailableColors.one,
+            ),
+            const ColorWidget(
+              color: AvailableColors.two,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 final colors = [
-  Colors.blue,
   Colors.green,
-  Colors.brown,
+  Colors.blue,
   Colors.yellow,
-  Colors.red,
-  Colors.black,
   Colors.purple,
-  Colors.amber,
-  Colors.orange,
+  Colors.brown,
   Colors.cyan,
   Colors.pink,
-  Colors.lime,
+  Colors.black,
 ];
 
 extension RandomElement<T> on Iterable<T> {
