@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:state_mangement_/ColorChange/color_change.dart';
-
 enum AvailableColors { one, two }
 
 class AvailableColorsWidget extends InheritedModel<AvailableColors> {
@@ -101,7 +99,7 @@ class _InheritedModelHomePageState extends State<InheritedModelHomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      _color1 = colors.getRandomElement();
+                      //   _color1 = colors.getRandomElement();
                     });
                   },
                   child: const Text('Change Color1'),
@@ -109,7 +107,7 @@ class _InheritedModelHomePageState extends State<InheritedModelHomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      _color1 = colors.getRandomElement();
+                      //   _color1 = colors.getRandomElement();
                     });
                   },
                   child: const Text('Change Color2'),
