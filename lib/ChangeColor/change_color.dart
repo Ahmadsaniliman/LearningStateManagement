@@ -3,9 +3,9 @@ import 'dart:math';
 
 enum AvailableColors { one, two }
 
-class AvailableColorsWidget extends InheritedModel {
-  final AvailableColors color1;
-  final AvailableColors color2;
+class AvailableColorsWidget extends InheritedModel<AvailableColors> {
+  final MaterialColor color1;
+  final MaterialColor color2;
 
   const AvailableColorsWidget({
     Key? key,
@@ -38,6 +38,77 @@ class AvailableColorsWidget extends InheritedModel {
       return true;
     }
     return false;
+  }
+
+  static AvailableColorsWidget of(
+    BuildContext context,
+    AvailableColors aspect,
+  ) {
+    return InheritedModel.inheritFrom<AvailableColorsWidget>(
+      context,
+      aspect: aspect,
+    )!;
+  }
+}
+
+class ColorWidget extends StatelessWidget {
+  const ColorWidget({Key? key, required this.color}) : super(key: key);
+  final AvailableColors color;
+  @override
+  Widget build(BuildContext context) {
+    final provider = AvailableColorsWidget.of(context, color);
+    return Container(
+      height: 100.0,
+      color: color != AvailableColors.one ? provider.color1 : provider.color2,
+    );
+  }
+}
+
+class ColorChangeHomePage extends StatefulWidget {
+  const ColorChangeHomePage({Key? key}) : super(key: key);
+
+  @override
+  _ColorChangeHomePageState createState() => _ColorChangeHomePageState();
+}
+
+class _ColorChangeHomePageState extends State<ColorChangeHomePage> {
+  var color1 = Colors.green;
+  var color2 = Colors.blue;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Color Change'),
+      ),
+      body: AvailableColorsWidget(
+        color1: color1,
+        color2: color2,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      color1 = colors.getRandomElement();
+                    });
+                  },
+                  child: const Text('Change Color1'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      color2 = colors.getRandomElement();
+                    });
+                  },
+                  child: const Text('Change Color2'),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
