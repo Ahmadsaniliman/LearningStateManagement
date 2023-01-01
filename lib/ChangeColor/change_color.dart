@@ -126,3 +126,26 @@ extension RandomElement<T> on Iterable<T> {
     );
   }
 }
+
+class ShouldUpdateWidget extends InheritedModel {
+  const ShouldUpdateWidget({
+    Key? key,
+    required Widget child,
+  }) : super(
+          key: key,
+          child: child,
+        );
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    // TODO: implement updateShouldNotify
+    throw UnimplementedError();
+  }
+
+  @override
+  bool updateShouldNotifyDependent(
+      covariant InheritedModel oldWidget, Set dependencies) {
+    // TODO: implement updateShouldNotifyDependent
+    throw UnimplementedError();
+  }
+}
