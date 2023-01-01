@@ -104,7 +104,18 @@ class _ColorChangeHomePageState extends State<ColorChangeHomePage> {
                   child: const Text('Change Color2'),
                 ),
               ],
-            )
+            ),
+            Column(children: const [
+              ColorWidget(
+                color: AvailableColors.one,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              ColorWidget(
+                color: AvailableColors.two,
+              ),
+            ]),
           ],
         ),
       ),
@@ -124,28 +135,5 @@ extension RandomElement<T> on Iterable<T> {
     return elementAt(
       Random().nextInt(length),
     );
-  }
-}
-
-class ShouldUpdateWidget extends InheritedModel {
-  const ShouldUpdateWidget({
-    Key? key,
-    required Widget child,
-  }) : super(
-          key: key,
-          child: child,
-        );
-
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    // TODO: implement updateShouldNotify
-    throw UnimplementedError();
-  }
-
-  @override
-  bool updateShouldNotifyDependent(
-      covariant InheritedModel oldWidget, Set dependencies) {
-    // TODO: implement updateShouldNotifyDependent
-    throw UnimplementedError();
   }
 }
