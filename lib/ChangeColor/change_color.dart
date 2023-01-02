@@ -105,17 +105,19 @@ class _ColorChangeHomePageState extends State<ColorChangeHomePage> {
                 ),
               ],
             ),
-            Column(children: const [
-              ColorWidget(
-                color: AvailableColors.one,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              ColorWidget(
-                color: AvailableColors.two,
-              ),
-            ]),
+            Column(
+              children: const [
+                ColorWidget(
+                  color: AvailableColors.one,
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                ColorWidget(
+                  color: AvailableColors.two,
+                ),
+              ],
+            ),
           ],
         ),
       ),
