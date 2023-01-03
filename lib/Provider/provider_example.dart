@@ -44,3 +44,25 @@ class BreadCrumbNotifier extends ChangeNotifier {
     _items.clear();
   }
 }
+
+class BreadCrumbWidget extends StatelessWidget {
+  final UnmodifiableListView<BreadCrumb> breadCrumbs;
+
+  const BreadCrumbWidget({
+    Key? key,
+    required this.breadCrumbs,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: breadCrumbs.map((breadCrumb) {
+        return Text(
+          breadCrumb.title,
+          style: TextStyle(
+            color: breadCrumb.isActive ? Colors.blue : Colors.black,
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
