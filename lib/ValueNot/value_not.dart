@@ -17,7 +17,6 @@ class ContactBook extends ValueNotifier<List<Contact>> {
   static final _shared = ContactBook._sharedInstance();
   factory ContactBook() => _shared;
 
-  final List<Contact> _contacts = [];
   int get lenght => value.length;
 
   void addContact({
@@ -33,15 +32,61 @@ class ContactBook extends ValueNotifier<List<Contact>> {
   }) {
     final contacts = value;
     if (contacts.contains(contact)) {
-      _contacts.remove(contact);
+      contacts.remove(contact);
       notifyListeners();
     }
   }
 
   Contact? contact({
     required int atIndex,
-  }) {
-    _contacts.length > atIndex ? _contacts[atIndex] : null;
+  }) =>
+      value.length > atIndex ? value[atIndex] : null;
+}
+
+class ContactPage extends StatefulWidget {
+  const ContactPage({Key? key}) : super(key: key);
+
+  @override
+  State<ContactPage> createState() => _ContactPageState();
+}
+
+class _ContactPageState extends State<ContactPage> {
+  @override
+  Widget build(BuildContext context) {
+    // final contactBook = ContactBook();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Contact Page'),
+      ),
+      floatingActionButton: IconButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed("/new-Contact-Route");
+        },
+        icon: const Icon(Icons.add),
+      ),
+      body: ValueListenableBuilder(
+        valueListenable: ContactBook(),
+        builder: (contact, child, value) {
+          final contacts = value as List<Contact>;
+          return ListView.builder(
+            itemCount: contacts.length,
+            itemBuilder: (context, index) {
+              final contact = contacts[index];
+              return Dismissible(
+                onDismissed: (direction) {
+                  contacts.remove(contact);
+                },
+                key: ValueKey(contact.id),
+                child: ListTile(
+                  title: Text(contact.name),
+                  subtitle: Text(contact.number),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -75,33 +120,60 @@ class _NewContactViewState extends State<NewContactView> {
       appBar: AppBar(
         title: const Text('New Contact'),
       ),
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 70.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 20.0,
+          horizontal: 25.0,
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 50.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(),
+              ),
+              child: TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                    border: InputBorder.none,
+                    hintText: 'Enter Your Name'),
+              ),
             ),
-            child: TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                  border: InputBorder.none, hintText: 'Eneter Your Name'),
+            const SizedBox(height: 20.0),
+            Container(
+              width: double.infinity,
+              height: 50.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(),
+              ),
+              child: TextField(
+                controller: _numberController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                    border: InputBorder.none,
+                    hintText: 'Enter Your Number'),
+              ),
             ),
-          ),
-          Container(
-            width: double.infinity,
-            height: 70.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: TextField(
-              controller: _numberController,
-              decoration: const InputDecoration(
-                  border: InputBorder.none, hintText: 'Eneter Your Number'),
-            ),
-          ),
-        ],
+            const SizedBox(height: 20.0),
+            TextButton(
+              onPressed: () {
+                final contact = Contact(
+                  number: _numberController.text,
+                  name: _nameController.text,
+                );
+
+                ContactBook().addContact(contact: contact);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            )
+          ],
+        ),
       ),
     );
   }

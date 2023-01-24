@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:state_mangement_/ChangeColor/change_color.dart';
 import 'package:state_mangement_/ValueNot/value_not.dart';
 
 void main() {
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'State Management Demo',
       theme: ThemeData(),
-      home: const ColorChangeHomePage(),
+      home: const ContactPage(),
       routes: {
         // "/new-Contact-Route": (context) => const NewContactPage(),
         "/new-Contact-Route": (context) => const NewContactView(),
