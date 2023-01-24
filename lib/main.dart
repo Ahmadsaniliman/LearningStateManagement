@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
       home: const ColorChangeHomePage(),
       routes: {
-        "/new-Contact-Route": (context) => const NewContactPage(),
         // "/new-Contact-Route": (context) => const NewContactPage(),
+        "/new-Contact-Route": (context) => const NewContactView(),
       },
     );
   }
