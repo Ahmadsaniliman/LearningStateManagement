@@ -16,18 +16,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
       home: const ContactPage(),
       routes: {
-        // "/new-Contact-Route": (context) => const NewContactPage(),
         "/new-Contact-Route": (context) => const NewContactView(),
       },
     );
-  }
-}
-
-class DDDD extends StatelessWidget {
-  const DDDD({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

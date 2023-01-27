@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class Contact {
-  final String id;
-  final String number;
   final String name;
+  final String number;
+  final String id;
 
   Contact({
-    required this.number,
     required this.name,
+    required this.number,
   }) : id = const Uuid().v4();
 }
 
@@ -17,7 +17,7 @@ class ContactBook extends ValueNotifier<List<Contact>> {
   static final _shared = ContactBook._sharedInstance();
   factory ContactBook() => _shared;
 
-  int get lenght => value.length;
+  int get length => value.length;
 
   void addContact({
     required Contact contact,
@@ -27,7 +27,7 @@ class ContactBook extends ValueNotifier<List<Contact>> {
     notifyListeners();
   }
 
-  void removeContact({
+  void renoveContact({
     required Contact contact,
   }) {
     final contacts = value;
