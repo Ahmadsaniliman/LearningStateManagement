@@ -3,31 +3,29 @@ import 'dart:math';
 
 enum AvailableColors { one, two }
 
-class AvailableColorsWidget extends InheritedModel<AvailableColors> {
+class AvailableColorWidget extends InheritedModel<AvailableColors> {
   final MaterialColor color1;
   final MaterialColor color2;
 
-  const AvailableColorsWidget({
+  const AvailableColorWidget({
     Key? key,
-    required child,
     required this.color1,
     required this.color2,
+    required Widget child,
   }) : super(
           key: key,
           child: child,
         );
 
   @override
-  bool updateShouldNotify(
-    covariant AvailableColorsWidget oldWidget,
-  ) {
+  bool updateShouldNotify(covariant AvailableColorWidget oldWidget) {
     return color1 != oldWidget.color1 || color2 != oldWidget.color2;
   }
 
   @override
   bool updateShouldNotifyDependent(
-    covariant AvailableColorsWidget oldWidget,
-    Set dependencies,
+    covariant AvailableColorWidget oldWidget,
+    Set<AvailableColors> dependencies,
   ) {
     if (dependencies.contains(AvailableColors.one) &&
         color1 != oldWidget.color1) {
@@ -40,102 +38,51 @@ class AvailableColorsWidget extends InheritedModel<AvailableColors> {
     return false;
   }
 
-  static AvailableColorsWidget of(
-    BuildContext context,
+  static AvailableColorWidget of(
+    context,
     AvailableColors aspect,
   ) {
-    return InheritedModel.inheritFrom<AvailableColorsWidget>(
+    return InheritedModel.inheritFrom<AvailableColorWidget>(
       context,
       aspect: aspect,
     )!;
   }
 }
 
-class ColorWidget extends StatelessWidget {
-  const ColorWidget({Key? key, required this.color}) : super(key: key);
+class ColorsWidget extends StatelessWidget {
+  const ColorsWidget({
+    Key? key,
+    required this.color,
+  }) : super(key: key);
+
   final AvailableColors color;
+
   @override
   Widget build(BuildContext context) {
-    final provider = AvailableColorsWidget.of(context, color);
+    final provider = AvailableColorWidget.of(
+      context,
+      color,
+    );
     return Container(
       height: 100.0,
-      color: color != AvailableColors.one ? provider.color1 : provider.color2,
+      width: double.infinity,
+      color: color == AvailableColors.one ? provider.color1 : provider.color2,
     );
   }
 }
 
-class ColorChangeHomePage extends StatefulWidget {
-  const ColorChangeHomePage({Key? key}) : super(key: key);
-
-  @override
-  _ColorChangeHomePageState createState() => _ColorChangeHomePageState();
-}
-
-class _ColorChangeHomePageState extends State<ColorChangeHomePage> {
-  var color1 = Colors.green;
-  var color2 = Colors.blue;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Color Change'),
-      ),
-      body: AvailableColorsWidget(
-        color1: color1,
-        color2: color2,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      color1 = colors.getRandomElement();
-                    });
-                  },
-                  child: const Text('Change Color1'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      color2 = colors.getRandomElement();
-                    });
-                  },
-                  child: const Text('Change Color2'),
-                ),
-              ],
-            ),
-            Column(
-              children: const [
-                ColorWidget(
-                  color: AvailableColors.one,
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                ColorWidget(
-                  color: AvailableColors.two,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-final colors = [
+final List<Color> colors = [
   Colors.blue,
   Colors.green,
   Colors.yellow,
+  Colors.red,
   Colors.brown,
+  Colors.pink,
+  Colors.purple,
 ];
 
-extension RandomElement<T> on Iterable<T> {
-  T getRandomElement() {
-    return elementAt(
-      Random().nextInt(length),
-    );
-  }
+extension GetRandomColor<T> on Iterable<T> {
+  T getRandom() => elementAt(
+        Random().nextInt(length),
+      );
 }

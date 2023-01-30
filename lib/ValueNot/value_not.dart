@@ -13,7 +13,10 @@ class Contact {
 }
 
 class ContactBook extends ValueNotifier<List<Contact>> {
-  ContactBook._sharedInstance() : super([]);
+  ContactBook._sharedInstance()
+      : super(
+          [],
+        );
   static final _shared = ContactBook._sharedInstance();
   factory ContactBook() => _shared;
 
@@ -27,7 +30,7 @@ class ContactBook extends ValueNotifier<List<Contact>> {
     notifyListeners();
   }
 
-  void renoveContact({
+  void removeContact({
     required Contact contact,
   }) {
     final contacts = value;
@@ -43,14 +46,9 @@ class ContactBook extends ValueNotifier<List<Contact>> {
       value.length > atIndex ? value[atIndex] : null;
 }
 
-class ContactPage extends StatefulWidget {
+class ContactPage extends StatelessWidget {
   const ContactPage({Key? key}) : super(key: key);
 
-  @override
-  State<ContactPage> createState() => _ContactPageState();
-}
-
-class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,27 +62,29 @@ class _ContactPageState extends State<ContactPage> {
         icon: const Icon(Icons.add),
       ),
       body: ValueListenableBuilder(
-        valueListenable: ContactBook(),
-        builder: (contact, child, value) {
-          final contacts = value as List<Contact>;
-          return ListView.builder(
-            itemCount: contacts.length,
-            itemBuilder: (context, index) {
-              final contact = contacts[index];
-              return Dismissible(
-                onDismissed: (direction) {
-                  contacts.remove(contact);
-                },
-                key: ValueKey(contact.id),
-                child: ListTile(
-                  title: Text(contact.name),
-                  subtitle: Text(contact.number),
-                ),
-              );
-            },
-          );
-        },
-      ),
+          valueListenable: ContactBook(),
+          builder: (contact, value, child) {
+            final contacts = value as List<Contact>;
+            return ListView.builder(
+                itemCount: contacts.length,
+                itemBuilder: (context, index) {
+                  final contact = contacts[index];
+                  return Dismissible(
+                    key: ValueKey(contact.id),
+                    onDismissed: (direction) {
+                      contacts.remove(contact);
+                    },
+                    child: Material(
+                      elevation: 7.0,
+                      child: ListTile(
+                        minVerticalPadding: 5.0,
+                        title: Text(contact.name),
+                        subtitle: Text(contact.number),
+                      ),
+                    ),
+                  );
+                });
+          }),
     );
   }
 }
@@ -165,8 +165,10 @@ class _NewContactViewState extends State<NewContactView> {
                   number: _numberController.text,
                   name: _nameController.text,
                 );
-
-                ContactBook().addContact(contact: contact);
+                if (_nameController.text.isNotEmpty &&
+                    _numberController.text.isNotEmpty) {
+                  ContactBook().addContact(contact: contact);
+                }
                 Navigator.of(context).pop();
               },
               child: const Text('Save'),

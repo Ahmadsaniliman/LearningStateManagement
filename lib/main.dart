@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:state_mangement_/Inherit/inherit.dart';
 import 'package:state_mangement_/ValueNot/value_not.dart';
 
 void main() {
@@ -14,7 +15,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'State Management Demo',
       theme: ThemeData(),
-      home: const ContactPage(),
+      home: ApiProvider(
+        api: Api(),
+        child: const InheritedHomePage(),
+      ),
       routes: {
         "/new-Contact-Route": (context) => const NewContactView(),
       },
