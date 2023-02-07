@@ -1,40 +1,48 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SliderData extends ChangeNotifier {
   double _value = 0.0;
   double get value => _value;
-  set value(newValue) {
-    if (newValue != value) {
+
+  set value(double newValue) {
+    if (newValue != _value) {
       _value = newValue;
       notifyListeners();
     }
   }
 }
 
+final sliderData = SliderData();
+
 class SliderInheritedNotifier extends InheritedNotifier<SliderData> {
   const SliderInheritedNotifier({
     Key? key,
-    required Widget child,
     required SliderData sliderData,
+    required Widget child,
   }) : super(
           key: key,
-          notifier: sliderData,
           child: child,
+          notifier: sliderData,
         );
 
-  static double of(BuildContext context) =>
-      context
-          .dependOnInheritedWidgetOfExactType<SliderInheritedNotifier>()
-          ?.notifier
-          ?.value ??
-      0.0;
+  static double of(context) {
+    return context
+            .dependOnInheritedWidgetOfExactType<SliderInheritedNotifier>()
+            ?.notifier
+            ?.value ??
+        0.0;
+  }
 }
 
-final sliderData = SliderData();
+class SliderChangePage extends StatefulWidget {
+  const SliderChangePage({Key? key}) : super(key: key);
 
-class SliderHomePage extends StatelessWidget {
-  const SliderHomePage({Key? key}) : super(key: key);
+  @override
+  State<SliderChangePage> createState() => _SliderChangePageState();
+}
 
+class _SliderChangePageState extends State<SliderChangePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,46 +51,25 @@ class SliderHomePage extends StatelessWidget {
       ),
       body: SliderInheritedNotifier(
         sliderData: sliderData,
-        child: Builder(builder: (context) {
-          return Column(
-            children: [
-              Slider(
-                value: SliderInheritedNotifier.of(context),
-                onChanged: (value) {
-                  sliderData.value = value;
-                },
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Opacity(
-                    opacity: SliderInheritedNotifier.of(context),
-                    child: Container(
-                      height: 200.0,
-                      color: Colors.green,
-                    ),
-                  ),
-                  Opacity(
-                    opacity: SliderInheritedNotifier.of(context),
-                    child: Container(
-                      height: 200.0,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ].expandEqually().toList(),
-              ),
-            ],
-          );
-        }),
+        child: Column(
+          children: [
+            Slider(
+              value: 0.0,
+              onChanged: (value) {},
+            ),
+            Row(
+              children: [
+                Container(
+                  height: 100.0,
+                ),
+                Container(
+                  height: 100.0,
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
-}
-
-extension ExpandEqually on Iterable<Widget> {
-  Iterable<Widget> expandEqually() => map(
-        (e) => Expanded(
-          child: e,
-        ),
-      );
 }
