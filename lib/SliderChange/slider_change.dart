@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SliderData extends ChangeNotifier {
@@ -71,5 +70,15 @@ class _SliderChangePageState extends State<SliderChangePage> {
         ),
       ),
     );
+  }
+}
+
+
+class ManchesterUnited extends StatelessWidget {
+  const ManchesterUnited({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
