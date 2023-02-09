@@ -50,35 +50,43 @@ class _SliderChangePageState extends State<SliderChangePage> {
       ),
       body: SliderInheritedNotifier(
         sliderData: sliderData,
-        child: Column(
-          children: [
-            Slider(
-              value: 0.0,
-              onChanged: (value) {},
-            ),
-            Row(
-              children: [
-                Container(
-                  height: 100.0,
-                ),
-                Container(
-                  height: 100.0,
-                ),
-              ],
-            )
-          ],
-        ),
+        child: Builder(builder: (context) {
+          return Column(
+            children: [
+              Slider(
+                value: SliderInheritedNotifier.of(context),
+                onChanged: (value) {
+                  sliderData.value = value;
+                },
+              ),
+              Row(
+                children: [
+                  Opacity(
+                    opacity: SliderInheritedNotifier.of(context),
+                    child: Container(
+                      height: 100.0,
+                      color: Colors.green,
+                    ),
+                  ),
+                  Opacity(
+                    opacity: SliderInheritedNotifier.of(context),
+                    child: Container(
+                      height: 100.0,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ].expandEqually().toList(),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
 }
 
-
-class ManchesterUnited extends StatelessWidget {
-  const ManchesterUnited({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
+extension ExpandEqually on Iterable<Widget> {
+  Iterable<Widget> expandEqually() => map(
+        (w) => Expanded(child: w),
+      );
 }
