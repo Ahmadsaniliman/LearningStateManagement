@@ -19,4 +19,7 @@ class BreadCrumb {
 
   @override
   int get hashCode => id.hashCode;
+
+  String get title => name + (isActive ? ' >' : '');
+//   String get title => isActive ? '$name + >' : '';
 }
