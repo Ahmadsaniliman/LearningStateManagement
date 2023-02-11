@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           "/new-Contact-Route": (context) => const NewContactView(),
-          "/new-Route": (context) => const NewContactView(),
+          "/new-Route": (context) => const NewBreadCrumbPage(),
         },
       ),
     );
