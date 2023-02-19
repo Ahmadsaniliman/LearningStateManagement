@@ -98,3 +98,69 @@ class ExpensiveWidget extends StatelessWidget {
     );
   }
 }
+
+class BaseObjectWidget extends StatelessWidget {
+  const BaseObjectWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<BaseObjectProvider>();
+    return Container(
+      height: 100,
+      color: Colors.lightGreenAccent,
+      child: Column(
+        children: [
+          const Text('Provider Widget'),
+          const Text('Id'),
+          Text(provider.id),
+        ],
+      ),
+    );
+  }
+}
+
+class BaseObjectWidgetHome extends StatelessWidget {
+  const BaseObjectWidgetHome({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Delect and Watch'),
+      ),
+      body: Column(
+        children: [
+          Row(
+            children: const [
+              Expanded(
+                child: CheapWidget(),
+              ),
+              Expanded(
+                child: ExpensiveWidget(),
+              ),
+            ],
+          ),
+          const Expanded(
+            child: BaseObjectWidget(),
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  context.read<BaseObjectProvider>().start();
+                },
+                child: const Text('Start'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<BaseObjectProvider>().stop();
+                },
+                child: const Text('Stop'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
