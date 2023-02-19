@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:state_mangement_/Inherit/inherit.dart';
 import 'package:state_mangement_/Provider/provider_example.dart';
+import 'package:state_mangement_/Provider2/read_watch_select_provider.dart';
 import 'package:state_mangement_/ValueNot/value_not.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => BreadCrumbProvider(),
+      create: (_) => BaseObjectProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'State Management Demo',
