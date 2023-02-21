@@ -49,3 +49,17 @@ class MultProviderSeconds extends StatelessWidget {
     );
   }
 }
+
+class MultiProvider extends StatelessWidget {
+  const MultiProvider({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
+      ),
+      body: const MultiProvider(),
+    );
+  }
+}
