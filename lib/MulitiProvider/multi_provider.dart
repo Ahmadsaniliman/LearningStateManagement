@@ -63,3 +63,26 @@ class MultiProvider extends StatelessWidget {
     );
   }
 }
+
+class MultiP extends StatelessWidget {
+  const MultiP({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class ManUnited extends StatefulWidget {
+  const ManUnited({ Key? key }) : super(key: key);
+
+  @override
+  State<ManUnited> createState() => _ManUnitedState();
+}
+
+class _ManUnitedState extends State<ManUnited> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
