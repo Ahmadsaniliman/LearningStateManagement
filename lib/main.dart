@@ -20,10 +20,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'State Management Demo',
         theme: ThemeData(),
-        home: ApiProvider(
-          api: Api(),
-          child: const InheritedHomePage(),
-        ),
+        home: const BaseObjectWidgetHome(),
         routes: {
           "/new-Contact-Route": (context) => const NewContactView(),
           "/new-Route": (context) => const NewBreadCrumbPage(),
