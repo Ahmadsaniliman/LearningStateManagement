@@ -29,3 +29,12 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class MILK extends StatelessWidget {
+  const MILK({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
