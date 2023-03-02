@@ -1,47 +1,52 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class BaseObject {
   final String id;
   final String lastUpdated;
-
   BaseObject()
       : id = const Uuid().v4(),
         lastUpdated = DateTime.now().toIso8601String();
+
+  @override
+  bool operator ==(covariant BaseObject other) => id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
-class CheapObject extends BaseObject {}
+class CheapObject extends BaseObjectProvider {}
 
-class ExpensiveObject extends BaseObject {}
+class ExpensiveObject extends BaseObjectProvider {}
 
 class BaseObjectProvider extends ChangeNotifier {
-  late final String id;
-  late final CheapObject _cheapObject;
-  late final ExpensiveObject _expensiveObject;
-  late final StreamSubscription _cheapStreamSub;
-  late final StreamSubscription _expensiveStreamSub;
+  late String id;
+  late String lastUpdated;
+  late CheapObject _cheapObject;
+  late ExpensiveObject _expensiveObject;
+  late StreamSubscription _cheapStreamSub;
+  late StreamSubscription _expensiveStreamSub;
 
   CheapObject get cheapObject => _cheapObject;
   ExpensiveObject get expensiveObject => _expensiveObject;
 
-  BaseObjectProvider()
-      : id = const Uuid().v4(),
-        _cheapObject = CheapObject(),
-        _expensiveObject = ExpensiveObject();
-
   void start() {
-    _cheapStreamSub = Stream.periodic(const Duration(seconds: 1)).listen((_) {
-      _cheapObject = CheapObject();
-      notifyListeners();
-    });
-    _expensiveStreamSub =
-        Stream.periodic(const Duration(seconds: 1)).listen((_) {
-      _expensiveObject = ExpensiveObject();
-      notifyListeners();
-    });
+    _cheapStreamSub = Stream.periodic(const Duration(seconds: 2)).listen(
+      (event) {
+        _cheapObject = CheapObject();
+        notifyListeners();
+      },
+    );
+    _expensiveStreamSub = Stream.periodic(const Duration(seconds: 2)).listen(
+      (event) {
+        _expensiveObject = ExpensiveObject();
+        notifyListeners();
+      },
+    );
   }
 
   void stop() {
@@ -52,7 +57,7 @@ class BaseObjectProvider extends ChangeNotifier {
   @override
   void notifyListeners() {
     id = const Uuid().v4();
-    notifyListeners();
+    super.notifyListeners();
   }
 }
 
@@ -67,10 +72,11 @@ class CheapWidget extends StatelessWidget {
     return Container(
       height: 100.0,
       color: Colors.green,
+      width: double.infinity,
       child: Column(
         children: [
           const Text('CheapObject'),
-          const Text('Last Updated'),
+          const Text('LastUpdated'),
           Text(cheapObject.lastUpdated),
         ],
       ),
@@ -83,16 +89,18 @@ class ExpensiveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final expensiveObject = context.select<BaseObjectProvider, ExpensiveObject>(
-        (provider) => provider.expensiveObject);
+    final provider = context.select<BaseObjectProvider, ExpensiveObject>(
+      (provider) => provider.expensiveObject,
+    );
     return Container(
       height: 100.0,
+      width: double.infinity,
       color: Colors.blue,
       child: Column(
         children: [
-          const Text('ExpensiveObject'),
+          const Text('Id'),
           const Text('Last Updated'),
-          Text(expensiveObject.lastUpdated),
+          Text(provider.lastUpdated),
         ],
       ),
     );
@@ -106,13 +114,14 @@ class BaseObjectWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<BaseObjectProvider>();
     return Container(
-      height: 100,
-      color: Colors.lightGreenAccent,
+      height: 100.0,
+      width: double.infinity,
+      color: Colors.lightGreen,
       child: Column(
         children: [
-          const Text('Provider Widget'),
-          const Text('Id'),
-          Text(provider.id),
+          const Text('BaseObject Widget'),
+          const Text('Last Updated'),
+          Text(provider.lastUpdated),
         ],
       ),
     );
@@ -126,7 +135,7 @@ class BaseObjectWidgetHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Delect and Watch'),
+        title: const Text('Home Page'),
       ),
       body: Column(
         children: [
