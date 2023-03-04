@@ -74,7 +74,7 @@ class MultiP extends StatelessWidget {
 }
 
 class ManUnited extends StatefulWidget {
-  const ManUnited({ Key? key }) : super(key: key);
+  const ManUnited({Key? key}) : super(key: key);
 
   @override
   State<ManUnited> createState() => _ManUnitedState();
