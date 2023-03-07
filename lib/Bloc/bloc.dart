@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,8 @@ abstract class LoadAction {
   const LoadAction();
 }
 
-extension StringUrl on PersonUrl {
-  String get getUrl {
+extension GetRandomNames on PersonUrl {
+  String get getPersonUrl {
     switch (this) {
       case PersonUrl.person1:
         return 'http://127.0.0.1:5500/lib/api/person1.json';
@@ -20,13 +21,19 @@ extension StringUrl on PersonUrl {
   }
 }
 
-@immutable
-abstract class LoadPersonAction implements LoadAction {
+Future<Iterable<Person>> getPerson(String url) => HttpClient()
+    .getUrl(Uri.parse(url))
+    .then((request) => request.close())
+    .then((response) => response.transform(utf8.decoder).join())
+    .then((string) => json.encode(string) as List<dynamic>)
+    .then((list) => list.map((e) => Person.fromJson(e)));
+
+abstract class PersonLoadAction implements LoadAction {
   final PersonUrl url;
 
-  const LoadPersonAction({
+  PersonLoadAction({
     required this.url,
-  }) : super();
+  });
 }
 
 class Person {
@@ -36,13 +43,4 @@ class Person {
   Person.fromJson(Map<String, dynamic> json)
       : name = json['name'] as String,
         age = json['age'] as int;
-}
-
-class BlocHomePage extends StatelessWidget {
-  const BlocHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
 }
