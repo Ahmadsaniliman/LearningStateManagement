@@ -44,3 +44,12 @@ class Person {
       : name = json['name'] as String,
         age = json['age'] as int;
 }
+
+class KKKKK extends StatelessWidget {
+  const KKKKK({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
