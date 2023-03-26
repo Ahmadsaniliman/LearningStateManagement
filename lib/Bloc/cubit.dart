@@ -1,40 +1,42 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const names = [
-  'Muhammad',
+  'Muhammaed',
   'Ahmad',
   'Sani',
   'Liman',
-  'Sweety',
 ];
 
 extension GetRandomNames<T> on Iterable<T> {
-  T getRandomName() => elementAt(Random().nextInt(length));
+  T getRandomnames() => elementAt(Random().nextInt(length));
 }
 
-class CubitNames extends Cubit<String?> {
-  CubitNames() : super(null);
+class NamesCubit extends Cubit<String?> {
+  NamesCubit() : super(null);
 
-  void pickRandomName() => emit(names.getRandomName());
+  void pickRandomName() => emit(names.getRandomnames());
 }
 
-class NameCubitHomePage extends StatefulWidget {
-  const NameCubitHomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<NameCubitHomePage> createState() => _NameCubitHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _NameCubitHomePageState extends State<NameCubitHomePage> {
-  late final CubitNames cubit;
+class _HomePageState extends State<HomePage> {
+  late final NamesCubit cubit;
 
   @override
   void initState() {
+    cubit = NamesCubit();
     super.initState();
-    cubit = CubitNames();
   }
 
   @override
@@ -46,36 +48,34 @@ class _NameCubitHomePageState extends State<NameCubitHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Cubit Home'),
-        ),
-        body: StreamBuilder(
-          stream: cubit.stream,
-          builder: (context, snapshot) {
-            final button = TextButton(
-              onPressed: () {},
-              child: const Text('Pick a random name'),
-            );
+      appBar: AppBar(
+        title: const Text('Home-Page'),
+      ),
+      body: StreamBuilder(
+        stream: cubit.stream,
+        builder: (context, snapshot) {
+          final button = TextButton(
+            onPressed: () => cubit.pickRandomName(),
+            child: const Text('Pick a random name'),
+          );
 
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                return button;
-
-              case ConnectionState.waiting:
-                return button;
-
-              case ConnectionState.active:
-                return Column(
-                  children: [
-                    Text('${snapshot.data ?? ''}'),
-                    button,
-                  ],
-                );
-
-              case ConnectionState.done:
-                return const CircularProgressIndicator();
-            }
-          },
-        ));
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return button;
+            case ConnectionState.waiting:
+              return button;
+            case ConnectionState.active:
+              return Column(
+                children: [
+                  Text('${snapshot.data ?? ''}'),
+                  button,
+                ],
+              );
+            case ConnectionState.done:
+              return const SizedBox();
+          }
+        },
+      ),
+    );
   }
 }
