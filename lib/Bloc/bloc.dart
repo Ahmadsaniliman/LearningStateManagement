@@ -1,27 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+
+enum PersonUrl { person1, person2 }
+
+// extension GetRandomName on PersonUrl {
+//     String get getUrl(String url) {
+//         switch(this) {
+//           case PersonUrl.person1:
+//             // TODO: Handle this case.
+//             break;
+//           case PersonUrl.person2:
+//             // TODO: Handle this case.
+//             break;
+//         }
+//     }
+// }
 
 @immutable
 abstract class LoadAction {
   const LoadAction();
 }
 
-enum PersonUrl { person1, person2 }
-
-extension StringUrl on PersonUrl {
-  String get getUrl {
-    switch (this) {
-      case PersonUrl.person1:
-        return 'http://127.0.0.1:5500/lib/api/person1.json';
-
-      case PersonUrl.person2:
-        return 'http://127.0.0.1:5500/lib/api/person2.json';
-    }
-  }
-}
-
 @immutable
-abstract class LoadPersonAction implements LoadAction {
-  final PersonUrl url;
+class PersonLoadAction implements LoadAction {}
 
-  const LoadPersonAction({required this.url}) : super();
+class BlocHomePage extends StatelessWidget {
+  const BlocHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var screenSizeHeight = MediaQuery.of(context).size.height;
+    var screenSizeWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('AppBar'),
+      ),
+      body: Center(
+        child: Container(
+          height: screenSizeHeight * 250,
+          width: screenSizeWidth * 250,
+          color: Colors.green,
+        ),
+      ),
+    );
+  }
 }
