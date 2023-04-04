@@ -4,17 +4,26 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-final persons = [
+const names = [
   'Muhammad',
   'Ahmad',
   'Sani',
   'Liman',
 ];
 
+class Person {
+  final String name;
+  final String age;
+
+  Person.fromJson(Map<String, dynamic> json)
+      : name = json['name'] as String,
+        age = json['age'] as String;
+}
+
 enum PersonUrl { person1, person2 }
 
-extension GetRandomName on PersonUrl {
-  String get getUrl {
+extension GetRandomPersonUrl on PersonUrl {
+  String get urlString {
     switch (this) {
       case PersonUrl.person1:
         return 'http://127.0.0.1:5500/lib/api/person1.json';
@@ -24,77 +33,50 @@ extension GetRandomName on PersonUrl {
   }
 }
 
-extension SubScript<T> on Iterable<T> {
-  T? operator [](int index) => length > index ? elementAt(index) : null;
+extension SubScrpit<T> on Iterable<T> {
+  T? operator [](int index) => index > length ? elementAt(index) : null;
 }
 
-@immutable
-abstract class LoadAction {
+class LoadAction {
   const LoadAction();
 }
 
-@immutable
 class PersonLoadAction implements LoadAction {
   final PersonUrl url;
-  const PersonLoadAction({
+
+  PersonLoadAction({
     required this.url,
-  });
+  }) : super();
 }
 
 Future<Iterable<Person>> getPersons(String url) => HttpClient()
     .getUrl(Uri.parse(url))
-    .then((res) => res.close())
-    .then((req) => req.transform(utf8.decoder).join())
+    .then((req) => req.close())
+    .then((res) => res.transform(utf8.decoder).join())
     .then((str) => json.decode(str) as List<dynamic>)
-    .then((list) => list.map((e) => Person.fromJsom(e)));
+    .then((list) => list.map((e) => Person.fromJson(e)));
 
-class Person {
-  final String name;
-  final String age;
-
-  Person.fromJsom(Map<String, String> json)
-      : name = json['name'] as String,
-        age = json['age'] as String;
-}
-
-@immutable
 class FetchedResult {
   final Iterable<Person> persons;
-  final bool isRetrivedFromCache;
+  final bool isRetrvedFromCache;
 
-  const FetchedResult({
+  FetchedResult({
     required this.persons,
-    required this.isRetrivedFromCache,
+    required this.isRetrvedFromCache,
   });
-
-  @override
-  String toString() =>
-      'FetchedResult (isRetrivedFromCache =  $isRetrivedFromCache, person = $persons)';
 }
 
 class PersonBloc extends Bloc<LoadAction, FetchedResult?> {
-  final Map<PersonUrl, Iterable<Person>> _cache = {};
+     final Map<PersonUrl, Iterable<Person>> _cache = {};
   PersonBloc() : super(null) {
-    on<PersonLoadAction>((event, emit) async {
-      final url = event.url;
-      if (_cache.containsKey(url)) {
-        final cachedPerons = _cache[url]!;
-        final result = FetchedResult(
-          persons: cachedPerons,
-          isRetrivedFromCache: true,
-        );
-        emit(result);
-      } else {
-        final persons = await getPersons(url.getUrl);
-        _cache[url] = persons;
-        final result = FetchedResult(
-          persons: persons,
-          isRetrivedFromCache: false,
-        );
-        emit(result);
-      }
-    });
-  }
+     on<PersonLoadAction>((event, emit) {
+          final url = event.url;
+          if (_cache.containsKey(url)) {
+               final cachePerson = _cache[url]; 
+               final result = FetchedResult(persons: cachePerson, isRetrvedFromCache: true,);
+          } else {}
+     });
+  };
 }
 
 class BlocHomePage extends StatelessWidget {
@@ -102,49 +84,6 @@ class BlocHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('AppBar'),
-      ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  context.read<PersonBloc>().add(
-                        const PersonLoadAction(url: PersonUrl.person1),
-                      );
-                },
-                child: const Text('Load Json#1'),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<PersonBloc>().add(
-                        const PersonLoadAction(url: PersonUrl.person2),
-                      );
-                },
-                child: const Text('Load Json#2'),
-              ),
-            ],
-          ),
-          BlocBuilder<PersonBloc, FetchedResult?>(
-            buildWhen: (previousResult, currentResult) =>
-                previousResult?.persons != currentResult?.persons,
-            builder: (context, state) => Expanded(
-              child: ListView.builder(
-                itemCount: persons.length,
-                itemBuilder: (context, index) {
-                  final person = persons[index];
-                  return ListTile(
-                    title: Text(person),
-                  );
-                },
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+    return const Placeholder();
   }
 }
