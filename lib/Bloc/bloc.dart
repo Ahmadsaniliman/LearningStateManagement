@@ -67,16 +67,16 @@ class FetchedResult {
 }
 
 class PersonBloc extends Bloc<LoadAction, FetchedResult?> {
-     final Map<PersonUrl, Iterable<Person>> _cache = {};
+  final Map<PersonUrl, Iterable<Person>> _cache = {};
   PersonBloc() : super(null) {
-     on<PersonLoadAction>((event, emit) {
-          final url = event.url;
-          if (_cache.containsKey(url)) {
-               final cachePerson = _cache[url]; 
-               final result = FetchedResult(persons: cachePerson, isRetrvedFromCache: true,);
-          } else {}
-     });
-  };
+    on<PersonLoadAction>((event, emit) {
+      final url = event.url;
+      if (_cache.containsKey(url)) {
+        final cachePerson = _cache[url];
+        //  final result = FetchedResult(persons: cachePerson, isRetrvedFromCache: true,);
+      } else {}
+    });
+  }
 }
 
 class BlocHomePage extends StatelessWidget {
