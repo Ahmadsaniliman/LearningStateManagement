@@ -69,12 +69,25 @@ class FetchedResult {
 class PersonBloc extends Bloc<LoadAction, FetchedResult?> {
   final Map<PersonUrl, Iterable<Person>> _cache = {};
   PersonBloc() : super(null) {
-    on<PersonLoadAction>((event, emit) {
+    on<PersonLoadAction>((event, emit) async {
       final url = event.url;
-      if (_cache.containsKey(url)) {
-        final cachePerson = _cache[url];
-        //  final result = FetchedResult(persons: cachePerson, isRetrvedFromCache: true,);
-      } else {}
+
+      if (_cache.containsKey(url.urlString)) {
+        final cachedPersons = _cache[url];
+        // final result = FetchedResult(
+        //   persons: cachedPersons,
+        //   isRetrvedFromCache: false,
+        // );
+        // emit(result);
+      } else {
+        final persons = await getPersons(url.urlString);
+        _cache[url] = persons;
+        final result = FetchedResult(
+          persons: persons,
+          isRetrvedFromCache: true,
+        );
+        emit(result);
+      }
     });
   }
 }
