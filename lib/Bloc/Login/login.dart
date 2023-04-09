@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -249,4 +251,106 @@ Future<T?> showGenericDialogFialog<T>({
       }).toList(),
     ),
   );
+}
+
+typedef CloseLoadingScreen = bool Function();
+typedef UpdateLoadingScreen = bool Function();
+
+@immutable
+class LoadScreenController {
+  final CloseLoadingScreen close;
+  final UpdateLoadingScreen update;
+
+  const LoadScreenController({
+    required this.close,
+    required this.update,
+  });
+}
+
+class LoadingScreen {
+  LoadingScreen._sharedInstance();
+  static final LoadingScreen _shared = LoadingScreen._sharedInstance();
+  factory LoadingScreen() => _shared;
+
+  LoadScreenController? _controller;
+
+  void show({
+    required BuildContext context,
+    required String text,
+  }) {
+    if (_controller?.update() ?? false) {
+      return;
+    } else {
+      _controller = showOverley(
+        context: context,
+        text: text,
+      );
+    }
+  }
+
+  void close() {}
+
+  LoadScreenController showOverley({
+    required BuildContext context,
+    required String text,
+  }) {
+    final _text = StreamController<String>();
+    _text.add(text);
+
+    final state = Overlay.of(context);
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+
+    final overLay = OverlayEntry(
+      builder: (context) {
+        return Material(
+          color: Colors.black.withAlpha(150),
+          child: Center(
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: size.height * 0.8,
+                maxWidth: size.width * 0.8,
+                minWidth: size.width * 0.5,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      const CircularProgressIndicator(),
+                      StreamBuilder<String>(builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data!,
+                            textAlign: TextAlign.center,
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    state.insert(overLay);
+    return LoadScreenController(
+      close: () {
+        _text.close();
+        overLay.remove();
+        return true;
+      },
+      update: () {
+        _text.add(text);
+        return true;
+      },
+    );
+  }
 }
