@@ -73,7 +73,7 @@ class PersonBloc extends Bloc<LoadAction, FetchedResult?> {
       final url = event.url;
 
       if (_cache.containsKey(url.urlString)) {
-        final cachedPersons = _cache[url];
+        // final cachedPersons = _cache[url];
         // final result = FetchedResult(
         //   persons: cachedPersons,
         //   isRetrvedFromCache: false,
