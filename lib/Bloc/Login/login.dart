@@ -354,3 +354,65 @@ class LoadingScreen {
     );
   }
 }
+
+class EmailTextField extends StatelessWidget {
+  final TextEditingController emailController;
+  const EmailTextField({
+    Key? key,
+    required this.emailController,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      autocorrect: false,
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      decoration: const InputDecoration(
+        hintText: enterYourEmailHere,
+      ),
+    );
+  }
+}
+
+class PasswordTextField extends StatelessWidget {
+  final TextEditingController passwordController;
+  const PasswordTextField({
+    Key? key,
+    required this.passwordController,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      autocorrect: false,
+      controller: passwordController,
+      obscuringCharacter: '*',
+      obscureText: true,
+      decoration: const InputDecoration(
+        hintText: enterYourPasswordHere,
+      ),
+    );
+  }
+}
+
+extension ToListView<T> on Iterable<T> {
+  Widget toListView() => IterableListView(iterable: this);
+}
+
+class IterableListView<T> extends StatelessWidget {
+  final Iterable<T> iterable;
+  const IterableListView({
+    Key? key,
+    required this.iterable,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (context, index) => const ListTile(
+        title: Text(''),
+      ),
+    );
+  }
+}
