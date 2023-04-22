@@ -85,12 +85,3 @@ class LoadingScreen {
     });
   }
 }
-
-class MMMM extends StatelessWidget {
-  const MMMM({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
