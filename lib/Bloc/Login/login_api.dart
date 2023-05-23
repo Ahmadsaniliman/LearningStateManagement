@@ -21,3 +21,4 @@ class LoginApi implements LoginApiProtocol {
         (isLoggedIn) => isLoggedIn ? const LoginHandle.fooBar() : null,
       );
 }
+
