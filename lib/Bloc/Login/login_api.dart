@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:state_mangement_/Bloc/Login/login_handle.dart';
 
 @immutable
@@ -22,3 +24,11 @@ class LoginApi implements LoginApiProtocol {
       );
 }
 
+class NNNN extends StatelessWidget {
+  const NNNN({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
