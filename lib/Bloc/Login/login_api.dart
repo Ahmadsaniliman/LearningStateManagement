@@ -23,12 +23,3 @@ class LoginApi implements LoginApiProtocol {
         (isLoggedIn) => isLoggedIn ? const LoginHandle.fooBar() : null,
       );
 }
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
