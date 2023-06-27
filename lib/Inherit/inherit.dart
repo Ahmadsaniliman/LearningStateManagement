@@ -32,13 +32,53 @@ class ApiProvider extends InheritedWidget {
   bool updateShouldNotify(covariant ApiProvider oldWidget) {
     return id != oldWidget.id;
   }
+
+  static ApiProvider of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ApiProvider>()!;
+  }
 }
 
-class HomepagetimeAndDate extends StatelessWidget {
-  const HomepagetimeAndDate({Key? key}) : super(key: key);
+class DateAndTimeWidget extends StatelessWidget {
+  const DateAndTimeWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final api = ApiProvider.of(context).api;
+    return Text(api.dateAndTime ?? 'Tap On The Screen');
+  }
+}
+
+class HomepagetimeAndDate extends StatefulWidget {
+  const HomepagetimeAndDate({Key? key}) : super(key: key);
+
+  @override
+  State<HomepagetimeAndDate> createState() => _HomepagetimeAndDateState();
+}
+
+class _HomepagetimeAndDateState extends State<HomepagetimeAndDate> {
+  final ValueKey _textValue = const ValueKey<String?>(null);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          ApiProvider.of(context).api.dateAndTime ?? '',
+        ),
+      ),
+      body: GestureDetector(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.white,
+          child: DateAndTimeWidget(key: _textValue),
+        ),
+        onTap: () {
+          final api = ApiProvider.of(context).api;
+          final dateAndTime = api.dateAndTime;
+          ValueKey(dateAndTime);
+        },
+      ),
+    );
   }
 }
