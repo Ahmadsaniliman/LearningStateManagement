@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
+extension ExpandEqually on Iterable<Widget> {
+  Iterable<Widget> expandEqually() => map(
+        (m) => Expanded(
+          child: m,
+        ),
+      );
+}
+
 class SliderData extends ChangeNotifier {
   double _value = 0.0;
   double get value => _value;
-
   set value(double newValue) {
-    if (newValue != _value) {
-      _value = newValue;
-      notifyListeners();
-    }
+    _value = newValue;
+    notifyListeners();
   }
 }
 
@@ -17,31 +22,30 @@ final sliderData = SliderData();
 class SliderInheritedNotifier extends InheritedNotifier<SliderData> {
   const SliderInheritedNotifier({
     Key? key,
-    required SliderData sliderData,
     required Widget child,
+    required SliderData sliderData,
   }) : super(
           key: key,
           child: child,
           notifier: sliderData,
         );
 
-  static double of(context) {
-    return context
-            .dependOnInheritedWidgetOfExactType<SliderInheritedNotifier>()
-            ?.notifier
-            ?.value ??
-        0.0;
-  }
+  static double of(BuildContext context) =>
+      context
+          .dependOnInheritedWidgetOfExactType<SliderInheritedNotifier>()
+          ?.notifier
+          ?.value ??
+      0.0;
 }
 
-class SliderChangePage extends StatefulWidget {
-  const SliderChangePage({Key? key}) : super(key: key);
+class SliderHomePage extends StatefulWidget {
+  const SliderHomePage({Key? key}) : super(key: key);
 
   @override
-  State<SliderChangePage> createState() => _SliderChangePageState();
+  State<SliderHomePage> createState() => _SliderHomePageState();
 }
 
-class _SliderChangePageState extends State<SliderChangePage> {
+class _SliderHomePageState extends State<SliderHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,44 +53,41 @@ class _SliderChangePageState extends State<SliderChangePage> {
         title: const Text('Slider Change'),
       ),
       body: SliderInheritedNotifier(
+        child: Builder(
+          builder: (context) {
+            return Column(
+              children: [
+                Slider(
+                  value: SliderInheritedNotifier.of(context),
+                  onChanged: (value) {
+                    sliderData.value = value;
+                  },
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Opacity(
+                      opacity: SliderInheritedNotifier.of(context),
+                      child: Container(
+                        height: 100.0,
+                        color: Colors.green,
+                      ),
+                    ),
+                    Opacity(
+                      opacity: SliderInheritedNotifier.of(context),
+                      child: Container(
+                        height: 100.0,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ].expandEqually().toList(),
+                )
+              ],
+            );
+          }
+        ),
         sliderData: sliderData,
-        child: Builder(builder: (context) {
-          return Column(
-            children: [
-              Slider(
-                value: SliderInheritedNotifier.of(context),
-                onChanged: (value) {
-                  sliderData.value = value;
-                },
-              ),
-              Row(
-                children: [
-                  Opacity(
-                    opacity: SliderInheritedNotifier.of(context),
-                    child: Container(
-                      height: 100.0,
-                      color: Colors.green,
-                    ),
-                  ),
-                  Opacity(
-                    opacity: SliderInheritedNotifier.of(context),
-                    child: Container(
-                      height: 100.0,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ].expandEqually().toList(),
-              ),
-            ],
-          );
-        }),
       ),
     );
   }
-}
-
-extension ExpandEqually on Iterable<Widget> {
-  Iterable<Widget> expandEqually() => map(
-        (w) => Expanded(child: w),
-      );
 }
