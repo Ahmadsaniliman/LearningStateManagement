@@ -30,7 +30,7 @@ class BreadCrumbProvider extends ChangeNotifier {
   final List<BreadCrumb> _items = [];
   UnmodifiableListView<BreadCrumb> get item => UnmodifiableListView(_items);
 
-  void add(BreadCrumb breadCrumb) {}
+  // void add(BreadCrumb breadCrumb) {}
 }
 
 class BreadCrumbHomePage extends StatefulWidget {
