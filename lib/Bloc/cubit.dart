@@ -1,76 +1,60 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const names = [
-  'Muhammaed',
+  'Muhammad',
   'Ahmad',
+  'Sani',
+  'Liman',
+  'Sweety',
+  'Muhammad',
   'Sani',
   'Liman',
 ];
 
-extension GetRandomNames<T> on Iterable<T> {
-  T getRandomnames() => elementAt(Random().nextInt(length));
+extension RandomNames<T> on Iterable<T> {
+  T getRandomNames() => elementAt(
+        Random().nextInt(length),
+      );
 }
 
 class NamesCubit extends Cubit<String?> {
   NamesCubit() : super(null);
 
-  void pickRandomName() => emit(names.getRandomnames());
+  void pickRandomName() => emit(
+        names.getRandomNames(),
+      );
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class CubitHomePage extends StatefulWidget {
+  const CubitHomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CubitHomePage> createState() => _CubitHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late final NamesCubit cubit;
+class _CubitHomePageState extends State<CubitHomePage> {
+  late final NamesCubit namesCubit;
 
   @override
   void initState() {
-    cubit = NamesCubit();
+    namesCubit = NamesCubit();
     super.initState();
   }
 
   @override
   void dispose() {
+    namesCubit.clear();
     super.dispose();
-    cubit.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home-Page'),
-      ),
-      body: StreamBuilder(
-        stream: cubit.stream,
-        builder: (context, snapshot) {
-          final button = TextButton(
-            onPressed: () => cubit.pickRandomName(),
-            child: const Text('Pick a random name'),
-          );
-
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return button;
-            case ConnectionState.waiting:
-              return button;
-            case ConnectionState.active:
-              return Column(
-                children: [
-                  Text('${snapshot.data ?? ''}'),
-                  button,
-                ],
-              );
-            case ConnectionState.done:
-              return const SizedBox();
-          }
-        },
+        title: const Text('Home Page'),
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:uuid/uuid.dart';
 
 @immutable
@@ -64,5 +66,115 @@ class ObjectProvider extends ChangeNotifier {
   void notifyListeners() {
     id = const Uuid().v4();
     super.notifyListeners();
+  }
+}
+
+class CheapWidget extends StatelessWidget {
+  const CheapWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cheapObject = context.select<ObjectProvider, CheapObject>(
+      (provider) => provider.cheapObject,
+    );
+    return Container(
+      height: 100.0,
+      color: Colors.green,
+      child: Column(
+        children: [
+          const Text('Cheap Widget'),
+          const Text('lastUpdated'),
+          Text(cheapObject.lastUpdated),
+        ],
+      ),
+    );
+  }
+}
+
+class ExpensiveWidget extends StatelessWidget {
+  const ExpensiveWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final expensiveObject = context.select<ObjectProvider, ExpensiveObject>(
+      (provider) => provider.expensiveObject,
+    );
+    return Container(
+      height: 100.0,
+      color: Colors.blue,
+      child: Column(
+        children: [
+          const Text('Expensive Widget'),
+          const Text('lastUpdated'),
+          Text(expensiveObject.lastUpdated),
+        ],
+      ),
+    );
+  }
+}
+
+class ObjectProviderWidget extends StatelessWidget {
+  const ObjectProviderWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<ObjectProvider>();
+    return Container(
+      height: 100.0,
+      color: Colors.orange,
+      child: Column(
+        children: [
+          const Text('Object Provider ID'),
+          const Text(' ID'),
+          Text(provider.id),
+        ],
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Homke Page'),
+      ),
+      body: Column(
+        children: [
+          Row(
+            children: const [
+              Expanded(
+                child: CheapWidget(),
+              ),
+              Expanded(
+                child: ExpensiveWidget(),
+              ),
+            ],
+          ),
+          const Expanded(
+            child: ObjectProviderWidget(),
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  context.read<ObjectProvider>().start();
+                },
+                child: const Text('Start'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<ObjectProvider>().stop();
+                },
+                child: const Text('Stop'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
