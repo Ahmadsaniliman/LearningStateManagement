@@ -1,23 +1,28 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 @immutable
-class LoginHandle {
+class Loginhandle {
   final String token;
 
-  const LoginHandle({
+  const Loginhandle({
     required this.token,
   });
 
-  const LoginHandle.fooBar() : token = 'fooBar';
+  const Loginhandle.fooBar() : token = 'foobar';
 
   @override
-  bool operator ==(covariant LoginHandle other) => token == other.token;
+  bool operator ==(covariant Loginhandle other) => token == other.token;
 
   @override
   int get hashCode => token.hashCode;
 
   @override
-  String toString() => ' LoginHandle (Token = $token)';
+  String toString() => 'LoginHandle (token = $token)';
 }
 
-enum LoginErrors { invalidHandle }
+
+enum LoginErrors {
+    inValidHandle
+}
+
+const longinError = '';

@@ -46,7 +46,7 @@ class _CubitHomePageState extends State<CubitHomePage> {
 
   @override
   void dispose() {
-    namesCubit.clear();
+    namesCubit.close();
     super.dispose();
   }
 
@@ -55,6 +55,30 @@ class _CubitHomePageState extends State<CubitHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
+      ),
+      body: StreamBuilder<String?>(
+        builder: (context, snapshot) {
+          final button = TextButton(
+            onPressed: () => namesCubit.pickRandomName(),
+            child: const Text('Pick a random name'),
+          );
+
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return button;
+            case ConnectionState.waiting:
+              return button;
+            case ConnectionState.active:
+              return Column(
+                children: [
+                  Text(snapshot.data ?? ''),
+                  button,
+                ],
+              );
+            case ConnectionState.done:
+              return button;
+          }
+        },
       ),
     );
   }
