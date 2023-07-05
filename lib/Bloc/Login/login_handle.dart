@@ -20,9 +20,18 @@ class Loginhandle {
   String toString() => 'LoginHandle (token = $token)';
 }
 
+enum LoginErrors { inValidHandle }
 
-enum LoginErrors {
-    inValidHandle
-}
-
-const longinError = '';
+const emailOrPasswordEmptyDialog =
+    'Please fill in both email and password fields';
+const emailOrPasswordDescription =
+    'You seem to have fogotten email or password field please fill them both';
+const loginErrorDialogTitle = 'Login error';
+const loginErrorDialogContent =
+    'Invalid email/password combination, please try again with valid login crendential';
+const pleaseWait = 'Please wait';
+const enterYourPasswordHere = 'Enter your password here...';
+const enterYourEmailHere = 'Enter your email here...';
+const ok = 'ok';
+const login = 'login';
+const homePage = 'homePage';
