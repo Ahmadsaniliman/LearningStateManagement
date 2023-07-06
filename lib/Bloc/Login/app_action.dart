@@ -1,7 +1,9 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 @immutable
-class AppAction {}
+abstract class AppAction {
+  const AppAction();
+}
 
 @immutable
 class LoginAction implements AppAction {
@@ -15,6 +17,6 @@ class LoginAction implements AppAction {
 }
 
 @immutable
-class LoadNotesAction {
+class LoadNotesAction implements AppAction {
   const LoadNotesAction();
 }

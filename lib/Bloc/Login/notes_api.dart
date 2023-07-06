@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:state_mangement_/Bloc/Login/login_handle.dart';
 
 @immutable
-class Notes {
+class Note {
   final String title;
 
-  const Notes({
+  const Note({
     required this.title,
   });
 
@@ -15,14 +15,28 @@ class Notes {
 
 final mockNotes = Iterable.generate(
   3,
-  (i) => Notes(title: 'Note ${i + 1}'),
+  (i) => Note(
+    title: 'Note ${i + 1}',
+  ),
 );
 
 @immutable
 abstract class NotesApiProtocol {
   const NotesApiProtocol();
 
-  Future<Iterable<Notes?>> getNotes({
+  Future<Iterable<Note>?> getNotes({
     required Loginhandle loginHandle,
   });
+}
+
+@immutable
+class NotesApi extends NotesApiProtocol {
+  @override
+  Future<Iterable<Note>?> getNotes({
+    required Loginhandle loginHandle,
+  }) =>
+      Future.delayed(
+        const Duration(seconds: 5),
+        () => loginHandle == const Loginhandle.fooBar() ? mockNotes : null,
+      );
 }
