@@ -4,19 +4,13 @@ import 'package:state_mangement_/Bloc/Login/notes_api.dart';
 
 @immutable
 class AppState {
-  final bool isLoading;
+  final bool isLodding;
   final LoginErrors? loginErrors;
-  final Loginhandle? loginHandle;
+  final LoginHandle? loginHandle;
   final Iterable<Note>? fetchedNotes;
 
-  const AppState.empty()
-      : isLoading = false,
-        loginErrors = null,
-        loginHandle = null,
-        fetchedNotes = null;
-
   const AppState({
-    required this.isLoading,
+    required this.isLodding,
     required this.loginErrors,
     required this.loginHandle,
     required this.fetchedNotes,
@@ -24,9 +18,15 @@ class AppState {
 
   @override
   String toString() => {
-        'isLoading': isLoading,
-        'loginErros': loginErrors,
+        'isLoading': isLodding,
+        'loginErrors': loginErrors,
         'loginHandle': loginHandle,
-        'FetchedNotes': fetchedNotes,
+        'fetchedNotes': fetchedNotes,
       }.toString();
+
+  const AppState.empty()
+      : isLodding = false,
+        loginErrors = null,
+        loginHandle = null,
+        fetchedNotes = null;
 }

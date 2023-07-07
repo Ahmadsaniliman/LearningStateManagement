@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class Loginhandle {
+class LoginHandle {
   final String token;
 
-  const Loginhandle({
+  const LoginHandle({
     required this.token,
   });
 
-  const Loginhandle.fooBar() : token = 'foobar';
+  const LoginHandle.fooBar() : token = 'foo@bar.com';
 
   @override
-  bool operator ==(covariant Loginhandle other) => token == other.token;
+  bool operator ==(covariant LoginHandle other) => token == other.token;
 
   @override
   int get hashCode => token.hashCode;
@@ -20,7 +20,7 @@ class Loginhandle {
   String toString() => 'LoginHandle (token = $token)';
 }
 
-enum LoginErrors { inValidHandle }
+enum LoginErrors { inValidLogins}
 
 const emailOrPasswordEmptyDialog =
     'Please fill in both email and password fields';

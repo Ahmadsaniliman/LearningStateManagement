@@ -5,27 +5,26 @@ import 'package:state_mangement_/Bloc/Login/login_handle.dart';
 abstract class LoginApiProtocol {
   const LoginApiProtocol();
 
-  Future<Loginhandle?> login({
+  Future<LoginHandle?> loginIn({
     required String email,
-    required password,
+    required String password,
   });
 }
 
 @immutable
-class LoginApi extends LoginApiProtocol {
+class LoginApi implements LoginApiProtocol {
   const LoginApi._sharedInstance();
-  static const _shared = LoginApi._sharedInstance();
-  factory LoginApi() => _shared;
-
+  static const LoginApi _shared = LoginApi._sharedInstance();
+  factory LoginApi.instance() => _shared;
   @override
-  Future<Loginhandle?> login({
+  Future<LoginHandle?> loginIn({
     required String email,
-    required password,
+    required String password,
   }) =>
       Future.delayed(
         const Duration(seconds: 4),
         () => email == 'foo@bar.com' && password == 'foobar',
       ).then(
-        (isLoggedIn) => isLoggedIn ? const Loginhandle.fooBar() : null,
+        (isLoggedIn) => isLoggedIn ? const LoginHandle.fooBar() : null,
       );
 }

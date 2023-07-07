@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 @immutable
-abstract class AppAction {
+class AppAction {
   const AppAction();
 }
 
 @immutable
-class LoginAction implements AppAction {
+class LoginAcion implements AppAction {
   final String email;
   final String password;
 
-  const LoginAction({
+  const LoginAcion({
     required this.email,
     required this.password,
   });
